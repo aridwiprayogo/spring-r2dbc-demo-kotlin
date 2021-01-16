@@ -1,6 +1,7 @@
 package com.aridwiprayogo.springr2dbcdemokotlin.handler
 
-import com.aridwiprayogo.springr2dbcdemokotlin.domain.User
+import com.aridwiprayogo.springr2dbcdemokotlin.domain.Users
+import com.aridwiprayogo.springr2dbcdemokotlin.payload.request.UserDto
 import com.aridwiprayogo.springr2dbcdemokotlin.service.UserService
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.server.*
@@ -11,8 +12,8 @@ import java.util.*
 class UserHandler (private val userService: UserService) {
 
     suspend fun saveUser(serverRequest: ServerRequest): ServerResponse{
-        val user = serverRequest.awaitBody<User>()
-        val saveUser = userService.saveUser(user)
+        val userDto = serverRequest.awaitBody<UserDto>()
+        val saveUser: Users = userService.saveUser(userDto)
         return ServerResponse.created(URI.create("")).bodyValueAndAwait(saveUser)
     }
 
@@ -21,7 +22,7 @@ class UserHandler (private val userService: UserService) {
         return ServerResponse.ok().bodyValueAndAwait(users)
     }
 
-    suspend fun getUserByName(serverRequest: ServerRequest): ServerResponse {
+    suspend fun getUserByNameOrPassword(serverRequest: ServerRequest): ServerResponse {
         val username: String = serverRequest.awaitFormData()["username"]?.get(0)?:""
         val password: String = serverRequest.awaitFormData()["password"]?.get(0)?:""
         val users = userService.getUserByNameOrPassword(username,password)
@@ -31,14 +32,14 @@ class UserHandler (private val userService: UserService) {
     suspend fun updateUser(serverRequest: ServerRequest): ServerResponse {
         val id: String = serverRequest.pathVariable("id")
         val uuid = UUID.fromString(id)
-        val user = serverRequest.awaitBody<User>()
-        userService.updateUser(uuid,user)
+        val userDto = serverRequest.awaitBody<UserDto>()
+        userService.updateUser(uuid,userDto)
         return ServerResponse.ok().bodyValueAndAwait("")
     }
 
     suspend fun deleteUser(serverRequest: ServerRequest): ServerResponse {
-        val user = serverRequest.awaitBody<User>()
-        userService.delete(user = user)
+        val id: String = serverRequest.pathVariable("id")
+        userService.delete(id= UUID.fromString(id))
         return ServerResponse.noContent().buildAndAwait()
     }
 }

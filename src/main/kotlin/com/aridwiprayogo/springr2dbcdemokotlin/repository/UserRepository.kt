@@ -1,9 +1,12 @@
 package com.aridwiprayogo.springr2dbcdemokotlin.repository
 
-import com.aridwiprayogo.springr2dbcdemokotlin.domain.User
-import org.springframework.data.repository.kotlin.CoroutineCrudRepository
+import com.aridwiprayogo.springr2dbcdemokotlin.domain.Users
+import org.springframework.data.repository.reactive.ReactiveSortingRepository
+import org.springframework.stereotype.Repository
+import reactor.core.publisher.Mono
 import java.util.*
 
-interface UserRepository : CoroutineCrudRepository<User,UUID>{
-    suspend fun findUserByNameOrPassword(name: String, password: String): User?
+@Repository
+interface UserRepository : ReactiveSortingRepository<Users,UUID>{
+    fun findByNameOrPassword(name: String, password: String): Mono<Users>
 }

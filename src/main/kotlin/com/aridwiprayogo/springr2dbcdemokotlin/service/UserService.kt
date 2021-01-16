@@ -1,12 +1,13 @@
 package com.aridwiprayogo.springr2dbcdemokotlin.service
 
-import com.aridwiprayogo.springr2dbcdemokotlin.domain.User
+import com.aridwiprayogo.springr2dbcdemokotlin.domain.Users
+import com.aridwiprayogo.springr2dbcdemokotlin.payload.request.UserDto
 import java.util.*
 
 interface UserService {
-    suspend fun saveUser(user: User): User
-    suspend fun getAllUser(): List<User>
-    suspend fun getUserByNameOrPassword(name: String, password: String): User
-    suspend fun updateUser(id:UUID, user: User): User
-    suspend fun delete(user: User): String
+    suspend fun saveUser(userDto: UserDto): Users
+    suspend fun getAllUser(): List<Users>
+    suspend fun getUserByNameOrPassword(name: String, password: String): Users
+    suspend fun updateUser(id:UUID, userDto: UserDto): Users
+    suspend fun delete(id: UUID): String
 }

@@ -2,20 +2,19 @@ spring:
   main:
     allow-bean-definition-overriding: true
   r2dbc:
-    url: r2dbc:postgresql://localhost:5432/postgres
-    name: postgres
+    url: r2dbc:postgresql://localhost:5432/postgres?currentSchema=users
     username: postgres
     password: root
     pool:
       enabled: true
   datasource:
-    schema: r2dbc
+    schema: users
   flyway:
     locations: classpath:db/migration
     url: jdbc:postgresql://localhost:5432/postgres
     user: postgres
     password: root
-    default-schema: 'r2dbc'
+    default-schema: 'users'
     create-schemas: true
     schemas:
-      - r2dbc
+      - users
